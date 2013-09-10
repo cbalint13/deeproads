@@ -1,0 +1,14 @@
+optimizer: GRADIENT_DESCENT
+stopcondition {
+  all_processed: false
+  steps: 1000000
+}
+train: true
+batchsize: 100
+data_proto: "ortho/ortho.pbtxt"
+eval_after: 500
+checkpoint_after: 2500
+checkpoint_directory: "save"
+randomize: true
+verbose: false
+show_after: 500

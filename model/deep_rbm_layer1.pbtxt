@@ -1,0 +1,77 @@
+name: "deep_rbm_1layer"
+model_type: DBM
+seed: 42
+
+hyperparams {
+  base_epsilon: 0.001
+  epsilon_decay: NONE
+  epsilon_decay_half_life: 6200000
+  initial_momentum: 0.9
+  final_momentum: 0.9
+  momentum_change_steps: 10000
+  sparsity: true
+  sparsity_target: 0.05
+  sparsity_cost: 0.01
+  sparsity_damping: 0.9
+  apply_l2_decay: false
+  l2_decay: 0.001
+  apply_weight_norm: false
+  weight_norm: 4
+  activation: LOGISTIC
+  mf_steps: 1
+  gibbs_steps: 1
+}
+
+layer {
+  name: "input_layer"
+  dimensions: 3072
+  is_input: true
+  hyperparams {
+    base_epsilon: 0.000001
+    sparsity: false
+    add_noise: true
+    normalize: true
+    activation: LINEAR
+  }
+  data_field {
+    train: "train_data"
+    validation: "test_data"
+  }
+  param {
+    name: "bias"
+    initialization: CONSTANT
+  }
+  loss_function: SQUARED_LOSS
+  performance_stats {
+    compute_error: true
+  }
+  shape: 32 #(+2,-2)
+  shape: 32 #(+2,-2)
+  shape: 3
+}
+layer {
+  name: "hidden1"
+  dimensions: 4096
+  param {
+    name: "bias"
+    initialization: CONSTANT
+  }
+  hyperparams {
+    add_noise: true
+  }
+  performance_stats {
+    compute_sparsity: true
+  }
+}
+edge {
+  node1: "input_layer"
+  node2: "hidden1"
+  hyperparams {
+  }
+  directed: false
+  param {
+    name: "weight"
+    initialization: DENSE_GAUSSIAN_SQRT_FAN_IN
+    sigma: 1.0
+  }
+}

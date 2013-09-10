@@ -1,0 +1,66 @@
+name: "deep_rbm_5layer"
+model_type: DBM
+seed: 47
+
+hyperparams {
+  base_epsilon: 0.01
+  epsilon_decay: INVERSE_T
+  epsilon_decay_half_life: 50000
+  initial_momentum: 0.5
+  final_momentum: 0.9
+  momentum_change_steps: 5000
+  sparsity: true
+  sparsity_target: 0.05
+  sparsity_cost: 0.01
+  sparsity_damping: 0.9
+  apply_l2_decay: true
+  l2_decay: 0.001
+  activation: LOGISTIC
+  gibbs_steps: 1
+  start_step_up_cd_after: 10000
+  step_up_cd_after: 5000
+}
+
+layer {
+  name: "hidden4"
+  dimensions: 512
+  is_input: true
+  param {
+    name: "bias"
+    initialization: CONSTANT
+  }
+  loss_function: SQUARED_LOSS
+  data_field {
+    train: "hidden4_train"
+    validation: "hidden4_validation"
+  }
+  performance_stats {
+    compute_error: true
+  }
+  hyperparams {
+    sparsity: false
+  }
+}
+
+layer {
+  name: "hidden5"
+  dimensions: 256
+  param {
+    name: "bias"
+    initialization: CONSTANT
+  }
+  performance_stats {
+    compute_sparsity: true
+  }
+}
+
+edge {
+  node1: "hidden4"
+  node2: "hidden5"
+  directed: false
+  param {
+    name: "weight"
+    initialization: DENSE_GAUSSIAN_SQRT_FAN_IN
+    sigma: 1.0
+  }
+}

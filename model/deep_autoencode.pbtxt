@@ -1,0 +1,455 @@
+name: "ortho_autoencoder"
+model_type: FEED_FORWARD_NET
+seed: 42
+
+hyperparams {
+  base_epsilon: 0.00001
+  epsilon_decay: INVERSE_T
+  epsilon_decay_half_life: 100000
+  initial_momentum: 0.9
+  final_momentum: 0.9
+  momentum_change_steps: 5000
+  weight_norm: 3
+  apply_weight_norm: false
+  apply_l2_decay: false
+  l2_decay: 0.001
+  activation: LOGISTIC
+  mf_steps: 1
+  gibbs_steps: 1
+  dropout: false
+  dropout_prob: 0.3
+  enable_display: false
+}
+layer {
+  name: "input_layer"
+  dimensions: 2352
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_1layer_LAST"
+  }
+  is_input: true
+  hyperparams {
+    shift: true
+    shift_amt_x: 2
+    shift_amt_y: 2
+    normalize: true
+    add_noise: true
+    sparsity: false
+    activation: LINEAR
+  }
+  data_field {
+    train: "train_data"
+    validation: "test_data"
+  }
+  shape: 32 #(+2,-2)
+  shape: 32 #(+2,-2)
+  shape: 3
+}
+layer {
+  name: "hidden1"
+  dimensions: 4096
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_2layer_rbm_LAST"
+  }
+}
+layer {
+  name: "hidden2"
+  dimensions: 2048
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_3layer_rbm_LAST"
+  }
+}
+layer {
+  name: "hidden3"
+  dimensions: 1024
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_4layer_rbm_LAST"
+  }
+}
+layer {
+  name: "hidden4"
+  dimensions: 512
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_5layer_rbm_LAST"
+  }
+}
+layer {
+  name: "hidden5"
+  dimensions: 256
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_6layer_rbm_LAST"
+  }
+}
+layer {
+  name: "hidden6"
+  dimensions: 128
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_7layer_rbm_LAST"
+  }
+}
+layer {
+  name: "hidden7"
+  dimensions: 64
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_8layer_rbm_LAST"
+  }
+}
+layer {
+  name: "hidden8"
+  dimensions: 32
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_9layer_rbm_LAST"
+  }
+}
+
+layer {
+  name: "hidden9"
+  dimensions: 3
+  param {
+    name: "bias"
+    initialization: CONSTANT
+    #initialization: PRETRAINED
+    #pretrained_model: "save/deep_rbm_9layer_rbm_LAST"
+  }
+}
+
+layer {
+  name: "hidden10"
+  dimensions: 32
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_9layer_rbm_LAST"
+    pretrained_model_param_name: "bias"
+    pretrained_model_node1: "hidden8"
+    pretrained_model_node2: "hidden9"
+    transpose_pretrained: true
+  }
+}
+layer {
+  name: "hidden11"
+  dimensions: 64
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_8layer_rbm_LAST"
+    pretrained_model_param_name: "bias"
+    pretrained_model_node1: "hidden7"
+    pretrained_model_node2: "hidden8"
+    transpose_pretrained: true
+  }
+}
+layer {
+  name: "hidden12"
+  dimensions: 128
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_7layer_rbm_LAST"
+    pretrained_model_node1: "hidden6"
+    pretrained_model_node2: "hidden7"
+    transpose_pretrained: true
+  }
+}
+layer {
+  name: "hidden13"
+  dimensions: 256
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_6layer_rbm_LAST"
+    pretrained_model_node1: "hidden5"
+    pretrained_model_node2: "hidden6"
+    transpose_pretrained: true
+  }
+}
+layer {
+  name: "hidden14"
+  dimensions: 512
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_5layer_rbm_LAST"
+    pretrained_model_node1: "hidden4"
+    pretrained_model_node2: "hidden5"
+    transpose_pretrained: true
+  }
+}
+layer {
+  name: "hidden15"
+  dimensions: 1024
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_4layer_rbm_LAST"
+    pretrained_model_node1: "hidden3"
+    pretrained_model_node2: "hidden4"
+    transpose_pretrained: true
+  }
+}
+layer {
+  name: "hidden16"
+  dimensions: 2048
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_3layer_rbm_LAST"
+    pretrained_model_node1: "hidden2"
+    pretrained_model_node2: "hidden3"
+    transpose_pretrained: true
+  }
+}
+layer {
+  name: "hidden17"
+  dimensions: 4096
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_2layer_rbm_LAST"
+    pretrained_model_node1: "hidden1"
+    pretrained_model_node2: "hidden2"
+    transpose_pretrained: true
+  }
+}
+layer {
+  name: "output_layer"
+  dimensions: 2352
+  param {
+    name: "bias"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_1layer_LAST"
+    pretrained_model_node1: "input_layer"
+    pretrained_model_node2: "hidden1"
+    transpose_pretrained: true
+  }
+  is_output: true
+  loss_function: SQUARED_LOSS
+  hyperparams {
+    dropout: false
+    activation: LINEAR
+    normalize: true
+    enable_display: false
+  }
+  data_field {
+    tied: true
+    tied_to: "input_layer"
+  }
+  performance_stats {
+    compute_error: true
+  }
+}
+
+edge {
+  node1: "input_layer"
+  node2: "hidden1"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_1layer_LAST"
+  }
+  hyperparams {
+    enable_display: false
+  }
+}
+edge {
+  node1: "hidden1"
+  node2: "hidden2"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_2layer_rbm_LAST"
+  }
+}
+edge {
+  node1: "hidden2"
+  node2: "hidden3"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_3layer_rbm_LAST"
+  }
+}
+edge {
+  node1: "hidden3"
+  node2: "hidden4"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_4layer_rbm_LAST"
+  }
+}
+edge {
+  node1: "hidden4"
+  node2: "hidden5"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_5layer_rbm_LAST"
+  }
+}
+edge {
+  node1: "hidden5"
+  node2: "hidden6"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_6layer_rbm_LAST"
+  }
+}
+edge {
+  node1: "hidden6"
+  node2: "hidden7"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_7layer_rbm_LAST"
+  }
+}
+
+edge {
+  node1: "hidden7"
+  node2: "hidden8"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_8layer_rbm_LAST"
+  }
+}
+edge {
+  node1: "hidden8"
+  node2: "hidden9"
+  param {
+    name: "weight"
+    #initialization: PRETRAINED
+    #pretrained_model: "save/deep_rbm_9layer_rbm_LAST"
+    initialization: DENSE_GAUSSIAN_SQRT_FAN_IN
+    sigma: 1.0
+  }
+}
+edge {
+  node1: "hidden9"
+  node2: "hidden10"
+  param {
+    name: "weight"
+    #initialization: PRETRAINED
+    #pretrained_model: "save/deep_rbm_9layer_rbm_LAST"
+    #pretrained_model_node1: "hidden9"
+    #pretrained_model_node2: "hidden8"
+    #transpose_pretrained: true
+    initialization: DENSE_GAUSSIAN_SQRT_FAN_IN
+    sigma: 1.0
+  }
+}
+edge {
+  node1: "hidden10"
+  node2: "hidden11"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_8layer_rbm_LAST"
+    pretrained_model_node1: "hidden8"
+    pretrained_model_node2: "hidden7"
+    transpose_pretrained: true
+  }
+}
+edge {
+  node1: "hidden11"
+  node2: "hidden12"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_7layer_rbm_LAST"
+    pretrained_model_node1: "hidden7"
+    pretrained_model_node2: "hidden6"
+    transpose_pretrained: true
+  }
+}
+edge {
+  node1: "hidden12"
+  node2: "hidden13"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_6layer_rbm_LAST"
+    pretrained_model_node1: "hidden6"
+    pretrained_model_node2: "hidden5"
+    transpose_pretrained: true
+  }
+}
+edge {
+  node1: "hidden13"
+  node2: "hidden14"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_5layer_rbm_LAST"
+    pretrained_model_node1: "hidden5"
+    pretrained_model_node2: "hidden4"
+    transpose_pretrained: true
+  }
+}
+edge {
+  node1: "hidden14"
+  node2: "hidden15"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_4layer_rbm_LAST"
+    pretrained_model_node1: "hidden4"
+    pretrained_model_node2: "hidden3"
+    transpose_pretrained: true
+  }
+}
+edge {
+  node1: "hidden15"
+  node2: "hidden16"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_3layer_rbm_LAST"
+    pretrained_model_node1: "hidden3"
+    pretrained_model_node2: "hidden2"
+    transpose_pretrained: true
+  }
+}
+edge {
+  node1: "hidden16"
+  node2: "hidden17"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_2layer_rbm_LAST"
+    pretrained_model_node1: "hidden2"
+    pretrained_model_node2: "hidden1"
+    transpose_pretrained: true
+  }
+}
+edge {
+  node1: "hidden17"
+  node2: "output_layer"
+  param {
+    name: "weight"
+    initialization: PRETRAINED
+    pretrained_model: "save/deep_rbm_1layer_LAST"
+    pretrained_model_node1: "hidden1"
+    pretrained_model_node2: "input_layer"
+    transpose_pretrained: true
+  }
+}
